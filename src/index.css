@@ -2,8 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base{
-    body{
-        @apply bg-slate-400;
-    }
+@layer base {
+  body {
+    @apply bg-slate-300;
+  }
 }
