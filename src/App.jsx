@@ -16,9 +16,6 @@ const App = () => {
           <Link to="/">
             <h2 className="text-white text-2xl font-bold">CRUD</h2>
           </Link>
-          <Link to="/">
-            <p className="text-white pl-10 font-bold">CRUD</p>
-          </Link>
         </div>
       </nav>
 
