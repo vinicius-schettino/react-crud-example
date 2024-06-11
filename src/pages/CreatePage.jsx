@@ -1,9 +1,7 @@
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { VITE_BACKEND_URL } from "../App";
-
+import { isProductValid, createProduct } from "../products";
 const CreatePage = () => {
   const [name, setName] = useState("");
   const [quantity, setQuantity] = useState("");
@@ -14,18 +12,19 @@ const CreatePage = () => {
 
   const saveProduct = async (e) => {
     e.preventDefault();
-    if (name === "" || quantity === "" || price === "" || image === "") {
+    const errorMessages = isProductValid({
+      name,
+      quantity,
+      price,
+      image,
+    });
+    if (Object.keys(errorMessages).length > 0) {
       alert("Please fill out all input completely");
       return;
     }
     try {
       setIsLoading(true);
-      const response = await axios.post(`${VITE_BACKEND_URL}/products`, {
-        name: name,
-        quantity: quantity,
-        price: price,
-        image: image,
-      });
+      let response = await createProduct({ name, quantity, price, image });
       toast.success(`Save ${response.data.name} sucessfully`);
       setIsLoading(false);
       navigate("/");
