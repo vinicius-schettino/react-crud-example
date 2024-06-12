@@ -1,9 +1,9 @@
 {
   "products": [
     {
-      "name": "Cadeira Conceito",
+      "name": "Cadeira Conceito 2",
       "quantity": "10",
-      "price": "150",
+      "price": "200",
       "image": "https://images.unsplash.com/photo-1581539250439-c96689b516dd?q=80&w=2586",
       "id": "abc123"
     },
