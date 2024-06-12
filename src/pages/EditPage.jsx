@@ -29,7 +29,6 @@ const EditPage = () => {
         price: response.data.price,
         image: response.data.image,
       });
-      setTimeout(() => {}, 1000);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
