@@ -1,30 +1,26 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { isProductValid, createProduct } from "../products";
+import { createProduct } from "../products";
+
+import ProductForm from "../components/ProductForm";
+import { useForm } from "react-hook-form";
+
 const CreatePage = () => {
-  const [name, setName] = useState("");
-  const [quantity, setQuantity] = useState("");
-  const [price, setPrice] = useState("");
-  const [image, setImage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-
+  const { control, handleSubmit } = useForm({});
+  const [product, setProduct] = useState({
+    name: "",
+    quantity: "",
+    price: "",
+    image: "",
+  });
   const saveProduct = async (e) => {
-    e.preventDefault();
-    const errorMessages = isProductValid({
-      name,
-      quantity,
-      price,
-      image,
-    });
-    if (Object.keys(errorMessages).length > 0) {
-      alert("Please fill out all input completely");
-      return;
-    }
+    console.log(e);
     try {
       setIsLoading(true);
-      let response = await createProduct({ name, quantity, price, image });
+      let response = await createProduct(product);
       toast.success(`Save ${response.data.name} sucessfully`);
       setIsLoading(false);
       navigate("/");
@@ -39,57 +35,13 @@ const CreatePage = () => {
       <h2 className="font-semibold text-2xl mb-4 block text-center">
         Create a Product
       </h2>
-      <form onSubmit={saveProduct}>
-        <div className="space-y-2">
-          <div>
-            <label>Name</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full block border p-3 text-gray-600 rounded focus:outline-none focus:shadow-outline focus:border-blue-200 placeholder-gray-400"
-              placeholder="Enter Name"
-            />
-          </div>
-          <div>
-            <label>Quantity</label>
-            <input
-              type="number"
-              value={quantity}
-              onChange={(e) => setQuantity(e.target.value)}
-              className="w-full block border p-3 text-gray-600 rounded focus:outline-none focus:shadow-outline focus:border-blue-200 placeholder-gray-400"
-              placeholder="Enter Quantity"
-            />
-          </div>
-          <div>
-            <label>Price</label>
-            <input
-              type="number"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-              className="w-full block border p-3 text-gray-600 rounded focus:outline-none focus:shadow-outline focus:border-blue-200 placeholder-gray-400"
-              placeholder="Enter Price"
-            />
-          </div>
-          <div>
-            <label>Image URL</label>
-            <input
-              type="text"
-              value={image}
-              onChange={(e) => setImage(e.target.value)}
-              className="w-full block border p-3 text-gray-600 rounded focus:outline-none focus:shadow-outline focus:border-blue-200 placeholder-gray-400"
-              placeholder="Enter Image URL"
-            />
-          </div>
-          <div>
-            {!isLoading && (
-              <button className="block w-full mt-6 bg-blue-700 text-white rounded-sm px-4 py-2 font-bold hover:bg-blue-600 hover:cursor-pointer">
-                Save
-              </button>
-            )}
-          </div>
-        </div>
-      </form>
+      <ProductForm
+        control={control}
+        isLoading={isLoading}
+        onSubmit={handleSubmit(saveProduct)}
+        product={product}
+        setProduct={setProduct}
+      />
     </div>
   );
 };
