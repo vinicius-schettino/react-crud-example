@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import Product from "../components/Product";
 import { Link } from "react-router-dom";
-import { VITE_BACKEND_URL } from "../App";
+import LinearProgress from "@mui/material/LinearProgress";
+import * as productApi from "../products";
 
 const HomePage = () => {
   const [products, setProducts] = useState([]);
@@ -11,7 +11,7 @@ const HomePage = () => {
   const getProducts = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(`${VITE_BACKEND_URL}/products/`);
+      const response = await productApi.getProducts();
       console.log(response.data);
       setProducts(response.data);
       setIsLoading(false);
@@ -26,6 +26,7 @@ const HomePage = () => {
 
   return (
     <div>
+      {isLoading && <LinearProgress />}
       <div>
         <Link
           to="/create"
@@ -35,27 +36,22 @@ const HomePage = () => {
         </Link>
       </div>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-5">
-        {isLoading ? (
-          "Loading"
-        ) : (
-          <>
-            {products.length > 0 ? (
-              <>
-                {products.map((product, index) => {
-                  return (
-                    <Product
-                      key={index}
-                      product={product}
-                      getProducts={getProducts}
-                    />
-                  );
-                })}
-              </>
-            ) : (
-              <div>There is no product</div>
-            )}
-          </>
-        )}
+        <>
+          {products.length > 0 && (
+            <>
+              {products.map((product, index) => {
+                return (
+                  <Product
+                    key={index}
+                    product={product}
+                    getProducts={getProducts}
+                  />
+                );
+              })}
+            </>
+          )}
+          {!isLoading && products.length == 0 && <div>There is no product</div>}
+        </>
       </div>
     </div>
   );

@@ -2,26 +2,34 @@ import { Link } from "react-router-dom";
 import { enqueueSnackbar } from "notistack";
 
 import { deleteProduct } from "../products";
+import { LinearProgress } from "@mui/material";
+import { useState } from "react";
 
 /* eslint-disable react/prop-types */
 const Product = ({ product, getProducts }) => {
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const confirmAndDelete = async (id) => {
     const result = confirm("Are you sure you want to delete this product?");
     if (result) {
       try {
+        setIsDeleting(true);
         await deleteProduct(id);
-        getProducts();
+        await getProducts();
+        setIsDeleting(false);
         enqueueSnackbar(`Product #${id} successfully deleted`, {
           variant: "success",
         });
       } catch (error) {
         enqueueSnackbar(error.message, { variant: "error" });
+        setIsDeleting(false);
       }
     }
   };
 
   return (
     <div className="bg-white rounded shadow-lg overflow-hidden">
+      {isDeleting && <LinearProgress color="warning" />}
       <img src={product.image} className="w-full h-28 object-cover" />
       <div className="px-4 pt-2 pb-4">
         <h2 className="text font-semibold">{product.name}</h2>

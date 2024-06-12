@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
 import ProductForm from "../components/ProductForm";
 import { useForm } from "react-hook-form";
 import * as productApi from "../products";
+import { enqueueSnackbar } from "notistack";
 
 const EditPage = () => {
   let { id } = useParams();
@@ -34,11 +34,13 @@ const EditPage = () => {
     setIsLoading(true);
     try {
       await productApi.updateProduct(id, product);
-      toast.success("Update a product successfully");
+      enqueueSnackbar(`Product #${id} updated`, {
+        variant: "success",
+      });
       navigate("/");
     } catch (error) {
       setIsLoading(false);
-      toast.error(error.message);
+      enqueueSnackbar(error.message, { variant: "error" });
     }
   };
 
@@ -57,17 +59,13 @@ const EditPage = () => {
       <h2 className="font-semibold text-2xl mb-4 block text-center">
         Update a Product
       </h2>
-      {isLoading ? (
-        "Loading"
-      ) : (
-        <ProductForm
-          control={control}
-          isLoading={isLoading}
-          onSubmit={handleSubmit(updateProduct)}
-          product={product}
-          setProduct={setProduct}
-        />
-      )}
+      <ProductForm
+        control={control}
+        isLoading={isLoading}
+        onSubmit={handleSubmit(updateProduct)}
+        product={product}
+        setProduct={setProduct}
+      />
     </div>
   );
 };

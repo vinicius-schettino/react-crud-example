@@ -6,8 +6,6 @@ import ProductForm from "../components/ProductForm";
 import { useForm } from "react-hook-form";
 
 const CreatePage = () => {
-  // const { enqueueSnackbar } = useSnackbar();
-
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { control, handleSubmit } = useForm({});
