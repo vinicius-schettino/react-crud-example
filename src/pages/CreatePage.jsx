@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import { createProduct } from "../products";
-
+import { enqueueSnackbar } from "notistack";
 import ProductForm from "../components/ProductForm";
 import { useForm } from "react-hook-form";
 
 const CreatePage = () => {
+  // const { enqueueSnackbar } = useSnackbar();
+
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { control, handleSubmit } = useForm({});
@@ -21,11 +22,13 @@ const CreatePage = () => {
     try {
       setIsLoading(true);
       let response = await createProduct(product);
-      toast.success(`Save ${response.data.name} sucessfully`);
+      enqueueSnackbar(`Product #${response.data.id} created`, {
+        variant: "success",
+      });
       setIsLoading(false);
       navigate("/");
     } catch (error) {
-      toast.error(error.message);
+      enqueueSnackbar(error.message, { variant: "error" });
       setIsLoading(false);
     }
   };

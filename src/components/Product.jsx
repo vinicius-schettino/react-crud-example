@@ -1,26 +1,21 @@
 import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
-import Swal from "sweetalert2";
+import { enqueueSnackbar } from "notistack";
+
 import { deleteProduct } from "../products";
 
 /* eslint-disable react/prop-types */
 const Product = ({ product, getProducts }) => {
   const confirmAndDelete = async (id) => {
-    const result = await Swal.fire({
-      title: "Do you really want to delete the product?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    });
-    if (result.isConfirmed) {
+    const result = confirm("Are you sure you want to delete this product?");
+    if (result) {
       try {
         await deleteProduct(id);
-        toast.success("Delete a product successfully");
         getProducts();
+        enqueueSnackbar(`Product #${id} successfully deleted`, {
+          variant: "success",
+        });
       } catch (error) {
-        toast.error(error.message);
+        enqueueSnackbar(error.message, { variant: "error" });
       }
     }
   };
@@ -30,6 +25,8 @@ const Product = ({ product, getProducts }) => {
       <img src={product.image} className="w-full h-28 object-cover" />
       <div className="px-4 pt-2 pb-4">
         <h2 className="text font-semibold">{product.name}</h2>
+        <div className="text-xs font-grey-300">#{product.id}</div>
+
         <div className="text-sm">Quantity: {product.quantity}</div>
         <div className="text-sm">Price ${product.price}</div>
 
