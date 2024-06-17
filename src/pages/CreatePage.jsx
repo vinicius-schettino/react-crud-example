@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createProduct } from "../products";
+import * as productApi from "../products";
 import { enqueueSnackbar } from "notistack";
 import ProductForm from "../components/ProductForm";
 import { useForm } from "react-hook-form";
@@ -19,7 +19,7 @@ const CreatePage = () => {
     console.log(e);
     try {
       setIsLoading(true);
-      let response = await createProduct(product);
+      let response = await productApi.createProduct(product);
       enqueueSnackbar(`Product #${response.data.id} created`, {
         variant: "success",
       });

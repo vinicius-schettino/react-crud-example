@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { enqueueSnackbar } from "notistack";
 
-import { deleteProduct } from "../products";
+import * as productApi from "../products";
 import { LinearProgress } from "@mui/material";
 import { useState } from "react";
 
@@ -14,7 +14,7 @@ const Product = ({ product, getProducts }) => {
     if (result) {
       try {
         setIsDeleting(true);
-        await deleteProduct(id);
+        await productApi.deleteProduct(id);
         await getProducts();
         setIsDeleting(false);
         enqueueSnackbar(`Product #${id} successfully deleted`, {
