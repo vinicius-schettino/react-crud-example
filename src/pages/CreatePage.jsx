@@ -16,7 +16,6 @@ const CreatePage = () => {
     image: "",
   });
   const saveProduct = async (e) => {
-    console.log(e);
     try {
       setIsLoading(true);
       let response = await productApi.createProduct(product);
